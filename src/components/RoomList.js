@@ -5,6 +5,8 @@ class RoomList extends Component{
   constructor(props) {
     super(props);
 
+    this.createRoom = this.createRoom.bind(this);
+
     this.state = {
       rooms: []
     };
@@ -21,13 +23,46 @@ class RoomList extends Component{
     });
   }
 
+  createRoom(e) {
+    e.preventDefault();
+    if(this.newRoomName.value === '') {return}
+    this.roomsRef.push({
+      name: this.newRoomName.value
+    });
+    this.newRoomName.value = '';
+    console.log(this.state.rooms)
+  }
+
+
   render() {
     return (
-      this.state.rooms.map(room =>
-        <div key={room.key}>
-        {room.name}
+
+        /*this.state.rooms.map(room =>
+          <div key={room.key}>
+          {room.name}
+          </div>
+        )*/
+      <div>
+        <form onSubmit={this.createRoom}>
+
+            <input
+              type="text"
+              name="name"
+              ref={(value) => this.newRoomName = value}
+            />
+            <input type="submit" />
+        </form>
+        <div className="room-list">
+          <ul>
+            {
+              this.state.rooms.map( (val,index) => {
+                return <li key={index}>{val.name}</li>
+              })
+            }
+          </ul>
         </div>
-      ))
+      </div>
+    );
   }
 }
 export default RoomList;
