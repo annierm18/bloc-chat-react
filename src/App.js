@@ -16,6 +16,7 @@ import * as firebase from 'firebase';
     messagingSenderId: "813993818145"
   };
   firebase.initializeApp(config);
+  firebase.database.ServerValue.TIMESTAMP;
 
 class App extends Component {
   constructor(props) {
