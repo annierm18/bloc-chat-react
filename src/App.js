@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import RoomList from './components/RoomList';
+import MessageList from './components/MessageList';
 import * as firebase from 'firebase';
-
 
 
 // Initialize Firebase
@@ -18,6 +18,18 @@ import * as firebase from 'firebase';
   firebase.initializeApp(config);
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+
+      this.state = {
+        activeRoom: ''
+      };
+  }
+
+  setActiveRoom(activeRoom){
+    this.setState( { activeRoom: activeRoom } );
+  }
+
   render() {
     return (
       <div className="App">
@@ -28,7 +40,15 @@ class App extends Component {
         <p className="App-intro">
           To get started, edit <code>src/App.js</code> and save to reload.
         </p>
-        <RoomList firebase={ firebase } />
+        <RoomList
+          firebase={ firebase }
+          setActiveRoom={ (activeRoom) => this.setActiveRoom(activeRoom)}
+          activeRoom= {this.state.activeRoom}
+        />
+        <MessageList
+          firebase={ firebase }
+          activeRoom={ this.state.activeRoom }
+        />
       </div>
     );
   }
