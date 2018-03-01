@@ -7,7 +7,7 @@ class MessageList extends Component{
 
     this.state = {
       messages: [],
-      messagesToShow: {username: "", content: "", sentAt: "", roomID: ""}
+      displayMessages: [],
     };
 
     this.messagesRef = this.props.firebase.database().ref('messages');
@@ -15,16 +15,22 @@ class MessageList extends Component{
   }
 
 
-  componentDidMount() {
-      console.log(this.props.activeRoomID);
-      console.log(this.messagesRef.child('Messages'));
+  componentWillReceiveProps(nextProps) {
       this.messagesRef.child('messages').on('child_added', snapshot => {
         const message = snapshot.val();
         message.key = snapshot.key;
         console.log(snapshot);
-        this.setState({ messages: this.state.messages.concat( message )});
+        this.props.nextProps.activeRoom;
+        this.updateDisplayMessages(nextProps.activeRoom);
+
       });
   }
+
+  updateDisplayMessages(activeRoom){
+    const currentRoom = this.state.messages.filter( message => message.roomID === activeRoom.key);
+    this.setState({displayMessages: currentRoom});
+  }
+
 
 
   render() {
@@ -32,18 +38,18 @@ class MessageList extends Component{
 
             <div className="message-list">
               <div>
-                <h2>{this.props.activeRoom.name}</h2>
+                <h2>{this.props.activeRoom.key}</h2>
               </div>
 
-              { this.state.messages.filter( message => message.roomID === this.props.activeRoom.key).map( (message, index ) =>
+              { this.state.messages.map( (displayMessages, index ) =>
                   <div key={index}>
-                    <h3>{message.username}</h3>
-                    <span>{message.sentat}</span>
-                    <p>{message.content}</p>
+                    <h3>{displayMessages.username}</h3>
+                    <span>{displayMessages.sentAt}</span>
+                    <p>{displayMessages.content}</p>
                   </div>
                 )
               }
-              </div>
+            </div>
 
     );
   }
