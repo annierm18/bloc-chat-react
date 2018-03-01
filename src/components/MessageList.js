@@ -14,16 +14,19 @@ class MessageList extends Component{
 
   }
 
+  componentDidMount() {
+    this.messagesRef.child('messages').on('child_added', snapshot => {
+      const message = snapshot.val();
+      message.key = snapshot.key;
+      console.log(snapshot);
+      this.setState({ messages: this.state.messages.concat( message )});
+    });
+  }
+
 
   componentWillReceiveProps(nextProps) {
-      this.messagesRef.child('messages').on('child_added', snapshot => {
-        const message = snapshot.val();
-        message.key = snapshot.key;
-        console.log(snapshot);
-        this.props.nextProps.activeRoom;
-        this.updateDisplayMessages(nextProps.activeRoom);
-
-      });
+      this.props.nextProps.activeRoom;
+      this.updateDisplayMessages(nextProps.activeRoom);
   }
 
   updateDisplayMessages(activeRoom){
