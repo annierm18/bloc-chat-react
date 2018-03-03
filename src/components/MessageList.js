@@ -24,16 +24,29 @@ class MessageList extends Component{
   }
 
 
-  componentWillReceiveProps(nextProps) {
-      this.props.nextProps.activeRoom;
-      this.updateDisplayMessages(nextProps.activeRoom);
+  componentWillReceiveProps(nextProps){
+      /*this.props.setActiveRoom(room) = nextProps.activeRoom;*/
+
+        this.props.activeRoom === nextProps.activeRoom;
+
+        this.updateDisplayMessages(nextProps.activeRoom);
   }
 
   updateDisplayMessages(activeRoom){
-    const currentRoom = this.state.messages.filter( message => message.roomID === activeRoom.key);
-    this.setState({displayMessages: currentRoom});
-  }
+    const currentRoom = this.state.messages.filter( message => message.roomId === activeRoom.key);
 
+    this.setState({displayMessages: currentRoom});
+    var newelement = {
+      content: '',
+      username: '',
+      sentAt: '',
+      roomId: ''
+    }
+
+    this.setState({
+        displayMessages: this.state.displayMessages.concat([newelement])
+    })
+  }
 
 
   render() {
@@ -43,12 +56,13 @@ class MessageList extends Component{
               <div>
                 <h2>{this.props.activeRoom.key}</h2>
               </div>
+              ref={(value) => this.newMessages = value}
 
-              { this.state.messages.map( (displayMessages, index ) =>
+              { this.state.displayMessages.map( (displayMessage, index ) =>
                   <div key={index}>
-                    <h3>{displayMessages.username}</h3>
-                    <span>{displayMessages.sentAt}</span>
-                    <p>{displayMessages.content}</p>
+                    <h3>{this.props.username}</h3>
+                    <span>{this.state.sentAt}</span>
+                    <p>{this.state.content}</p>
                   </div>
                 )
               }
