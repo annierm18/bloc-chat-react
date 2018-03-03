@@ -33,14 +33,6 @@ class MessageList extends Component{
 
 
   render() {
-      const activeRoom = this.props.activeRoom;
-
-      const messageBar = (
-        <form onSubmit={this.createMessage}>
-          <input type="text" value={this.state.content} placeholder="Enter Message" onChange={this.handleChange}/>
-          <input type="submit" value="Send" />
-          </form>
-      );
 
     return(
         <div className="message-list">
