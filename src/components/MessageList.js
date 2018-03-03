@@ -9,13 +9,11 @@ class MessageList extends Component{
       messages: [],
       displayMessages: [],
     };
-
     this.messagesRef = this.props.firebase.database().ref('messages');
-
   }
 
   componentDidMount() {
-    this.messagesRef.child('messages').on('child_added', snapshot => {
+    this.messagesRef.on('child_added', snapshot => {
       const message = snapshot.val();
       message.key = snapshot.key;
       console.log(snapshot);
@@ -23,54 +21,40 @@ class MessageList extends Component{
     });
   }
 
-
   componentWillReceiveProps(nextProps){
-      /*this.props.setActiveRoom(room) = nextProps.activeRoom;*/
-
         this.props.activeRoom === nextProps.activeRoom;
-
         this.updateDisplayMessages(nextProps.activeRoom);
   }
 
   updateDisplayMessages(activeRoom){
-    const currentRoom = this.state.messages.filter( message => message.roomId === activeRoom.key);
-
-    this.setState({displayMessages: currentRoom});
-    var newelement = {
-      content: '',
-      username: '',
-      sentAt: '',
-      roomId: ''
-    }
-
-    this.setState({
-        displayMessages: this.state.displayMessages.concat([newelement])
-    })
+    const newArray = this.state.messages.filter( message => message.roomId === activeRoom.key);
+    this.setState({displayMessages: newArray});
   }
 
 
   render() {
-    return (
+      const activeRoom = this.props.activeRoom;
 
-            <div className="message-list">
-              <div>
-                <h2>{this.props.activeRoom.key}</h2>
-              </div>
-              ref={(value) => this.newMessages = value}
+      const messageBar = (
+        <form onSubmit={this.createMessage}>
+          <input type="text" value={this.state.content} placeholder="Enter Message" onChange={this.handleChange}/>
+          <input type="submit" value="Send" />
+          </form>
+      );
 
-              { this.state.displayMessages.map( (displayMessage, index ) =>
-                  <div key={index}>
-                    <h3>{this.props.username}</h3>
-                    <span>{this.state.sentAt}</span>
-                    <p>{this.state.content}</p>
-                  </div>
-                )
+    return(
+        <div className="message-list">
+            <h2>{this.props.activeRoom.key}</h2>
+            <ul>
+              {
+             this.state.displayMessages.map( (displayMessage, index ) =>{
+                return <div key={index}>{displayMessage.content}</div>
+                })
               }
-            </div>
-
-    );
+              </ul>
+          </div>
+      );
   }
-
 }
 
 
