@@ -3,7 +3,12 @@ import logo from './logo.svg';
 import './App.css';
 import RoomList from './components/RoomList';
 import MessageList from './components/MessageList';
+import User from './components/User';
 import * as firebase from 'firebase';
+
+firebase.initializeApp(config);
+firebase.database.ServerValue.TIMESTAMP;
+var provider = new firebase.auth.GoogleAuthProvider();
 
 
 // Initialize Firebase
@@ -15,21 +20,42 @@ import * as firebase from 'firebase';
     storageBucket: "bloc-chat-react-94cc3.appspot.com",
     messagingSenderId: "813993818145"
   };
-  firebase.initializeApp(config);
-  firebase.database.ServerValue.TIMESTAMP;
+
+
+  firebase.auth().signInWithPopup(provider).then(function(result) {
+    var token = result.credential.accessToken;
+    var user = result.user;
+      }).catch(function(error) {
+      var errorCode = error.code;
+      var errorMessage = error.message;
+      var email = error.email;
+      var credential = error.credential;
+    });
+
+    firebase.auth().signOut().then(function() {
+      }).catch(function(error) {
+      });
+
 
 class App extends Component {
   constructor(props) {
     super(props);
 
       this.state = {
-        activeRoom: ''
+        activeRoom: '',
+        userName: ''
+
       };
   }
 
   setActiveRoom(activeRoom){
     this.setState( { activeRoom: activeRoom } );
   }
+
+  setUser(userName){
+    this.setState( { userName: userName} );
+  }
+
 
   render() {
     return (
@@ -49,6 +75,10 @@ class App extends Component {
         <MessageList
           firebase={ firebase }
           activeRoom={ this.state.activeRoom }
+        />
+        <User
+        firebase={ firebase }
+        userName={ this.state.userName }
         />
       </div>
     );
