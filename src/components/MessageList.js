@@ -22,8 +22,7 @@ class MessageList extends Component{
   }
 
   componentWillReceiveProps(nextProps){
-        this.props.activeRoom === nextProps.activeRoom;
-        this.updateDisplayMessages(nextProps.activeRoom);
+    this.updateDisplayMessages(nextProps.activeRoom);
   }
 
   updateDisplayMessages(activeRoom){

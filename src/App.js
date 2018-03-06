@@ -6,9 +6,6 @@ import MessageList from './components/MessageList';
 import User from './components/User';
 import * as firebase from 'firebase';
 
-firebase.initializeApp(config);
-firebase.database.ServerValue.TIMESTAMP;
-var provider = new firebase.auth.GoogleAuthProvider();
 
 
 // Initialize Firebase
@@ -21,39 +18,27 @@ var provider = new firebase.auth.GoogleAuthProvider();
     messagingSenderId: "813993818145"
   };
 
+  firebase.initializeApp(config);
 
-  firebase.auth().signInWithPopup(provider).then(function(result) {
-    var token = result.credential.accessToken;
-    var user = result.user;
-      }).catch(function(error) {
-      var errorCode = error.code;
-      var errorMessage = error.message;
-      var email = error.email;
-      var credential = error.credential;
-    });
-
-    firebase.auth().signOut().then(function() {
-      }).catch(function(error) {
-      });
 
 
 class App extends Component {
   constructor(props) {
     super(props);
 
-      this.state = {
-        activeRoom: '',
-        userName: ''
-
-      };
+    this.state = {
+      activeRoom: '',
+      user: null
+    };
   }
 
   setActiveRoom(activeRoom){
     this.setState( { activeRoom: activeRoom } );
   }
 
-  setUser(userName){
-    this.setState( { userName: userName} );
+  setUser(user){
+    console.log(user);
+    this.setState( { user: user} );
   }
 
 
@@ -78,7 +63,8 @@ class App extends Component {
         />
         <User
         firebase={ firebase }
-        userName={ this.state.userName }
+        setUser={ (user) => this.setUser(user)}
+        user={ this.state.user }
         />
       </div>
     );
