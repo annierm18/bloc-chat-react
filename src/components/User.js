@@ -20,15 +20,15 @@ class User extends Component{
 
   render(){
     return (
-      <div>
-        {this.props.user ? this.props.user.displayName : 'no user'}
+      <div className="user1">
+        {this.props.user ? this.props.user.displayName : 'No User'}
         {this.props.user ?
           <div id= "sign-out">
-            <button onClick={this.handleSignOutClick}> Log Out </button>
+            <button className="button3" onClick={this.handleSignOutClick}> Log Out </button>
           </div>
           :
            <div id ="sign-in">
-            <button onClick={this.handleSignInClick}> Log In </button>
+            <button className="button3" onClick={this.handleSignInClick}> Log In </button>
            </div>
         }
         </div>

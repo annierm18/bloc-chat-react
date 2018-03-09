@@ -44,13 +44,12 @@ class RoomList extends Component{
         )*/
       <div>
         <form onSubmit={this.createRoom}>
-
             <input
               type="text"
               name="name"
               ref={(value) => this.newRoomName = value}
             />
-            <input type="submit" />
+            <input className="button2"  type="submit" />
         </form>
         <div className="room-list">
           <ul>

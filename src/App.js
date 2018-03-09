@@ -49,23 +49,27 @@ class App extends Component {
           <img src={logo} className="App-logo" alt="logo" />
           <h1 className="App-title">Welcome to React</h1>
         </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
-        <RoomList
-          firebase={ firebase }
-          setActiveRoom={ (activeRoom) => this.setActiveRoom(activeRoom)}
-          activeRoom= {this.state.activeRoom}
-        />
-        <MessageList
-          firebase={ firebase }
-          activeRoom={ this.state.activeRoom }
-        />
-        <User
-        firebase={ firebase }
-        setUser={ (user) => this.setUser(user)}
-        user={ this.state.user }
-        />
+        <div className="body">
+          <div id="col1">
+            <RoomList
+              firebase={ firebase }
+              setActiveRoom={ (activeRoom) => this.setActiveRoom(activeRoom)}
+              activeRoom= {this.state.activeRoom}
+            />
+          </div>
+          <div id="col2">
+            <MessageList
+              firebase={ firebase }
+              activeRoom={ this.state.activeRoom }
+              user={ this.state.user }
+            />
+          </div>
+        </div>
+          <User
+            firebase={ firebase }
+            setUser={ (user) => this.setUser(user)}
+            user={ this.state.user }
+          />
       </div>
     );
   }

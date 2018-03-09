@@ -8,6 +8,7 @@ class MessageList extends Component{
     this.state = {
       messages: [],
       displayMessages: [],
+      messagesToShow: []
     };
     this.messagesRef = this.props.firebase.database().ref('messages');
   }
@@ -17,7 +18,7 @@ class MessageList extends Component{
       const message = snapshot.val();
       message.key = snapshot.key;
       console.log(snapshot);
-      this.setState({ messages: this.state.messages.concat( message )});
+      this.setState({ messages: this.state.messages.concat( message )}, () => this.updateDisplayMessages(this.props.activeRoom));
     });
   }
 
@@ -30,10 +31,49 @@ class MessageList extends Component{
     this.setState({displayMessages: newArray});
   }
 
+  createNewMessages = (e) => {
+    e.preventDefault();
+     if(this.newMessage.value === '') {return}
+
+     var roomInfo = {
+         username: this.props.user ? this.props.user.displayName : "guest",
+         content: this.newMessage.value,
+         sentAt: this.props.firebase.database.ServerValue.TIMESTAMP,
+         roomId: this.props.activeRoom.key
+         }
+
+    this.messagesRef.push(roomInfo);
+
+    this.newMessage.value = '';
+
+
+    /*this.messagesRef.push({
+      content: this.newMessages.value
+    });
+    this.setState({messages: this.newMessages.value });*/
+  }
+
+/*  createUserName(user){
+    this.props.setUser(user);
+  }*/
+
 
   render() {
+  const isRoomChosen = this.props.activeRoom !== '';
+  return(
+    <div>
+    {isRoomChosen ? (
+      <form onSubmit={this.createNewMessages}>
+          <input
+            type="text"
+            name="name"
+            ref={(value) => this.newMessage = value}
+          />
+          <input className="button2" type="submit" value="Post Message"/>
+      </form>
 
-    return(
+      ) : (null)}
+
         <div className="message-list">
             <h2>{this.props.activeRoom.key}</h2>
             <ul>
@@ -42,9 +82,10 @@ class MessageList extends Component{
                 return <div key={index}>{displayMessage.content}</div>
                 })
               }
-              </ul>
-          </div>
-      );
+            </ul>
+        </div>
+      </div>
+    );
   }
 }
 
